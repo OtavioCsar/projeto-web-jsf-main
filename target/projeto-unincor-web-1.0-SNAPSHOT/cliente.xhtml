@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Cadastro de Clientes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</h:head>
+<h:body>
+    <p:outputPanel id="painel-geral">
+        <p:messages skipDetailIfEqualsSummary="true">
+            <p:autoUpdate/>
+        </p:messages>
+        <p:panel header="Clientes Cadastrados" rendered="#{clienteBean.cliente == null}">
+            <h:form>
+                <p:commandButton value="Novo" icon="pi pi-plus" actionListener="#{clienteBean.novoCliente()}"
+                                 update="painel-geral"/>
+            </h:form>
+            <h:form>
+                <p:dataTable value="#{clienteBean.clientes}" var="clie"
+                             filteredValue="#{clienteBean.clientesFilter}">
+                    <p:column headerText="ID">
+                        <p:outputLabel value="#{clie.id}"/>
+                    </p:column>
+                    <p:column headerText="Nome" filterBy="#{clie.nome}" filterMatchMode="contains"
+                              sortBy="#{clie.nome}">
+                        <p:outputLabel value="#{clie.nome}"/>
+                    </p:column>
+
+                    <p:column headerText="Cpf" filterBy="#{clie.cpf}" filterMatchMode="contains" sortBy="#{clie.cpf}">
+                        <p:outputLabel value="#{clie.cpf}">
+
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Email" filterBy="#{clie.email}" filterMatchMode="contains"
+                              sortBy="#{clie.email}">
+                        <p:outputLabel value="#{clie.email}">
+
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Data de nascimento">
+                        <p:outputLabel value="#{clie.dataNascimento}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Celular">
+                        <p:outputLabel value="#{clie.celular}">
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Opções">
+
+                        <p:commandButton value="Editar" icon="pi pi-pencil" actionListener="#{clienteBean.editar(clie)}"
+                                         update="painel-geral"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+        <p:panel header="Novo Cliente" rendered="#{clienteBean.cliente !=null}">
+            <h:form>
+                <!-- Tag para gerar as mensagens de erro e o autoupdate ira
+                atualiza-la automaticamente -->
+
+                <p:panelGrid columns="1">
+                    <p:inputText placeholder="Nome" maxlength="100" size="60"
+                                 value="#{clienteBean.cliente.nome}"
+                                 required="true" requiredMessage="Informe o nome"/>
+                    <p:inputMask mask="999.999.999-99" placeholder="CPF" maxlength="100" size="40"
+                                 value="#{clienteBean.cliente.cpf}"
+                                 required="true" requiredMessage="Informe o cpf"/>
+                    <p:inputText placeholder="E-mail" maxlength="100" size="60"
+                                 value="#{clienteBean.cliente.email}"
+                                 required="true" requiredMessage="Informe o e-mail"/>
+                    <p:calendar value="#{clienteBean.cliente.dataNascimento}"
+                                placeholder="Data de nascimento" mask="99/99/9999"
+                                required="true"
+                                requiredMessage="Informe a data de nascimento"/>
+                    <p:inputMask mask="(00)00000-0000" placeholder="Celular" maxlength="100" size="40"
+                                 value="#{clienteBean.cliente.celular}"
+                                 required="true" requiredMessage="Informe o celular"/>
+                </p:panelGrid>
+                <br/>
+                <!-- Atenção -> CommandButton fora do panelgrid -->
+                <p:commandButton value="Salvar" icon="pi pi-save"
+                                 actionListener="#{clienteBean.salvar()}"
+                                 update="@form painel-geral" style="margin-right: 5px"/>
+                <p:commandButton value="Cancelar" icon="pi pi-times"
+                                 immediate="true" update="painel-geral"
+                                 actionListener="#{clienteBean.cancelar()}"/>
+            </h:form>
+        </p:panel>
+    </p:outputPanel>
+</h:body>
+</html>
